@@ -1,3 +1,4 @@
+/* eslint-disable implicit-arrow-linebreak */
 const path = require('path');
 const getDataFromFile = require('../utils/readJsonFromFile');
 
