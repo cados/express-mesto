@@ -4,7 +4,20 @@ const getFileData = (pathToFile) =>
   // eslint-disable-next-line implicit-arrow-linebreak
   fs
     .readFile(pathToFile)
-    .then((data) => JSON.parse(data))
-    .catch((err) => console.log(err));
+    .catch(() => {
+      // eslint-disable-next-line no-throw-literal
+      throw `file ${pathToFile} not found`;
+    })
+    .then((data) => {
+      try {
+        return JSON.parse(data);
+      } catch (_) {
+        // eslint-disable-next-line no-throw-literal
+        throw 'json is not valid';
+      }
+    })
+    .catch((err) => {
+      throw err;
+    });
 
 module.exports = getFileData;
