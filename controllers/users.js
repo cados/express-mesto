@@ -62,8 +62,10 @@ const updateUser = (req, res) => {
       res.status(200).send(newUser);
     })
     .catch((err) => {
-      if (err.name === 'CastError' || err.name === 'ValidationError') {
+      if (err.name === 'ValidationError') {
         res.status(400).send({ message: `Ошибка при валидации: ${err}` });
+      } else if (err.name === 'DocumentNotFoundError') {
+        res.status(404).send({ message: `id пользователя не найден! ${err}`});
       } else {
         res.status(500).send({ message: `Внутренняя ошибка сервера: ${err}` });
       }
@@ -82,13 +84,15 @@ const updateAvatar = (req, res) => {
       runValidators: true,
     },
   )
-    .orFail(new Error('ValidationError'))
+    .orFail()
     .then((newAvatar) => {
       res.status(200).send(newAvatar);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({ message: `Ошибка при валидации: ${err}` });
+      } else if (err.name === 'DocumentNotFoundError') {
+        res.status(404).send({ message: `id пользователя не найден! ${err}` });
       } else {
         res.status(500).send({ message: `Внутренняя ошибка сервера: ${err}` });
       }
